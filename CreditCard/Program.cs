@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace CreditCard
 {
@@ -10,35 +11,30 @@ namespace CreditCard
             string usersID = Console.ReadLine();
             if (Validation(usersID))
             {
-                //GetAge(usersID);
-                HelloUser(usersID);
+                if (GetAge(usersID))
+                {
+                    HelloUser(usersID);
+                    Console.WriteLine("Enter your credit card number:");
+                    string creditcardNum = Console.ReadLine();
+                    if (CreditCardNumValidation(creditcardNum))
+                    {
+                        Console.WriteLine("Please enter your CVV code on the back of your credit card");
+                        string userCVV = Console.ReadLine();
+                        if (CVVcode(userCVV) == true)                        
+                            Console.WriteLine("Your card has been accepted.");
+                        else
+                            Console.WriteLine("Your card has been declined.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Your credit card number is invalid.");
+                    }
+                }
             }
             else
             {
                 Console.WriteLine("Wrong format for the ID card, try again.");
             }
-
-            Console.WriteLine("Enter your credit card number:");
-            string creditcardNum = Console.ReadLine();
-            if (CreditCardNumValidation(creditcardNum))
-            {
-                Console.WriteLine("Please enter your CVV code on the back of your credit card");
-                string userCVV = Console.ReadLine();
-                CVVcode(userCVV);
-            }
-            else
-            {
-                Console.WriteLine("Your credit card has been declined.");
-            }
-
-            /*if (Validation == true)
-            {
-                Console.WriteLine("Your credit card has been accepted");
-            }
-            else
-            {
-                Console.WriteLine("Your Credit card has been declined.");
-            }*/
 
 
 
@@ -82,33 +78,36 @@ namespace CreditCard
 
         }
 
-        /*public static int GetAge(string idCode)
+        public static bool GetAge(string idCode)
         {
             string getYear = idCode.Substring(1, 2);
-            if ((int.Parse(idCode[0].ToString()) > 4, getYear == 01, getYear == 02))
+
+            if ((int.Parse(idCode[0].ToString()) > 4 && getYear == "01" || getYear == "02"))
             {
+                Console.WriteLine("Welcome.");
+                return true;
             }else
             {
                 Console.WriteLine("You are not authorized to use a credit card yet.");
+                return false;
             }
-            int yearParsed = GetAge(idCode);
-            return yearParsed;
-        }*/
+        }
 
         public static bool CreditCardNumValidation(string creditcardNum)
         {
-            if (creditcardNum.Length == 16)
+            if (creditcardNum.Length == 16 && creditcardNum.All(char.IsDigit))
             {
-                try
+                return true;
+                /*try
                 {
                     long.Parse(creditcardNum);
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     Console.WriteLine($"Wrong format: {e}");
                     return false;
-                }
+                }*/
 
             }
             else
@@ -128,9 +127,9 @@ namespace CreditCard
                     int.Parse(userCVV);
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    Console.WriteLine($"Wrong format: {e}");
+                    Console.WriteLine("Wrong format");
                     return false;
                 }
 
